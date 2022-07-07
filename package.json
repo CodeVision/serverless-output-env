@@ -1,0 +1,25 @@
+{
+  "name": "serverless-get-env",
+  "version": "1.0.0",
+  "description": "Serverless plugin / module to get environment variables from a serverless project",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "serverless",
+    "env"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/serverless": "^3.12.7"
+  },
+  "peerDependencies": {
+    "serverless": "^3.19.0"
+  },
+  "dependencies": {
+    "cfn-resolver-lib": "^1.1.8"
+  }
+}
