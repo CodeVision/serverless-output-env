@@ -13,15 +13,14 @@ export default class Resolver {
 
     const resources = await getResources(this.serverless.providers.aws, basicAWSProperties);
 
-    const evaluator = new NodeEvaluator(Object.assign({ Parameters: [] }, variables), {
+    const evaluator = new NodeEvaluator(Object.assign({ Parameters: [] }, { variables }), {
       RefResolvers: {
         ...baseParameters,
         ...this.getRefResolvers(resources),
       },
       "Fn::GetAttResolvers": this.getAttributeResolvers(resources, basicAWSProperties)
     });
-    const result = evaluator.evaluateNodes();
-    console.log(result);
+    return evaluator.evaluateNodes().variables;
   }
 
   getRefResolvers(resources) {
