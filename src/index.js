@@ -1,18 +1,41 @@
 import Resolver from './lib/resolver.js';
 
+import { writeFile } from 'fs/promises';
+
 export default class GetEnvPlugin {
-  constructor(serverless) {
+  constructor(serverless, options, { log }) {
     this.serverless = serverless;
+    this.options = options;
+    this.log = log;
 
     this.hooks = {
       intialize: () => this.init(),
-      "get-env:collect": () => this.collectVariables(),
-      "get-env:resolve": () => this.resolveVariables()
+      'before:get-env:output': async () => {
+        await this.collectVariables();
+        await this.resolveVariables();
+        await this.prepareOutput();
+      },
+      'get-env:output': () => this.outputVariables()
     }
 
     this.commands = {
       'get-env': {
-        lifecycleEvents: ['collect', 'resolve']
+        usage: 'Get the environment and custom variables defined in the serverless.yml',
+        lifecycleEvents: ['output'],
+        options: {
+          outputFile: {
+            usage: 'Specify the file you want to write the output to',
+            shortcut: 'o',
+            type: 'string',
+            default: '.env'
+          },
+          print: {
+            usage: 'Print the variables to the command line instead of writing to a file',
+            shortcut: 'p',
+            type: 'boolean',
+            default: false
+          }
+        }
       }
     }
   }
@@ -22,8 +45,21 @@ export default class GetEnvPlugin {
   }
 
   async collectVariables() {
-    const customs = this.serverless.service.custom;
-    const customStageVars = customs?.['get-env']?.outputs?.[this.serverless.service.provider.stage];
+    const customs = this.serverless.service.custom?.['get-env'];
+
+    let customStageVars = {};
+    if (customs) {
+      const stage = this.serverless.service.provider.stage;
+
+      const defaults = customs.variables?.default;
+      const stageVars = customs.variables?.[stage];
+
+      if (stage === 'prod' && !customs.useDefaultForProduction) {
+        customStageVars = { ...stageVars };
+      } else {
+        customStageVars = { ...defaults, ...stageVars };
+      }
+    }
 
     const globalEnvVars = this.serverless.service.provider.environment || {};
 
@@ -34,10 +70,33 @@ export default class GetEnvPlugin {
       functionEnvVars = { ...functionEnvVars, ...func.environment };
     };
 
-    this.environmentVariables = { ...customStageVars, ...globalEnvVars, ...functionEnvVars };
+    this.environmentVariables = { raw: { ...customStageVars, ...globalEnvVars, ...functionEnvVars }};
   }
 
   async resolveVariables() {
-    return new Resolver(this.serverless).resolve(this.environmentVariables);
+    const resolver = new Resolver(this.serverless);
+    this.environmentVariables.resolved = await resolver.resolve(this.environmentVariables.raw);
+  }
+
+  async prepareOutput() {
+    this.preparedOutput = Object.entries(this.environmentVariables.resolved).map(([key, value]) => {
+      return `${key}=${value}`;
+    }).join('\n');
+  }
+
+  async outputVariables() {
+    if (this.options.print) {
+      this.log.info(this.preparedOutput);
+    } else {
+      await writeOutputFile(this.preparedOutput, this.options.outputFile);
+    }
   }
 }
+
+const writeOutputFile = async (output, file) => {
+  try {
+    await writeFile(file, output);
+  } catch {
+    this.log.error(`Error writing output to file: ${file}`);
+  }
+};
