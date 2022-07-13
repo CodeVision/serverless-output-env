@@ -53,19 +53,19 @@ $ serverless output-env --stage test --outputFile .env.test
 ### Command line options
 The plugin supports a number of command line options:
 
-| -            | -        | -       | -                                                                                                                                  |
-| Option       | Shortcut | Default | Description                                                                                                                        |
+| Option       | Shortcut | Default | Description                                                                                                                       |
+| ------------ | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | --print      | -p       | false   | Print the environment variables to standard output instead of writing to a file (useful for checking as well as programmatic use) |
-| --outputFile | -o       | .env    | Name of the file to output the environment variables to                                                                            |
+| --outputFile | -o       | .env    | Name of the file to output the environment variables to                                                                           |
 
 ## Configuration
 
 The main differentiator between this plugin and the 'original' is the option to configure environment variables in the `custom` section of the `serverless` configuration file. The following options can be specified in the `custom.output-env` section.
 
-| -                       | -       | -                                                                                                                                                                 |
-| Setting                 | Default | Description                                                                                                                                                       |
-| localVariables               | -       | Object to group the additional (local only) environment variables you want to specify. |
-| useDefaultForProduction | false   | Whether to include the variables specified under default in the production stage output                                                                           |
+| Setting                 | Default | Description                                                                             |
+| ----------------------- | ------- | --------------------------------------------------------------------------------------- |
+| localVariables          | -       | Object to group the additional (local only) environment variables you want to specify.  |
+| useDefaultForProduction | false   | Whether to include the variables specified under default in the production stage output |
 
 The `variables` settings follows a structure similar to the `params` key in the `serverless` configuration file. A key can be specified for each stage with variables specific to that stage as well as a default key that applies to all stages.
 
