@@ -10,16 +10,16 @@ export default class GetEnvPlugin {
 
     this.hooks = {
       intialize: () => this.init(),
-      'before:get-env:output': async () => {
+      'before:output-env:output': async () => {
         await this.collectVariables();
         await this.resolveVariables();
         await this.prepareOutput();
       },
-      'get-env:output': () => this.outputVariables()
+      'output-env:output': () => this.outputVariables()
     }
 
     this.commands = {
-      'get-env': {
+      'output-env': {
         usage: 'Get the environment and custom variables defined in the serverless.yml',
         lifecycleEvents: ['output'],
         options: {
@@ -45,7 +45,7 @@ export default class GetEnvPlugin {
   }
 
   async collectVariables() {
-    const customs = this.serverless.service.custom?.['get-env'];
+    const customs = this.serverless.service.custom?.['output-env'];
 
     let customStageVars = {};
     if (customs) {

@@ -1,7 +1,7 @@
 {
-  "name": "serverless-get-env",
+  "name": "serverless-output-env",
   "version": "1.0.0",
-  "description": "Serverless plugin / module to get environment variables from a serverless project",
+  "description": "Serverless plugin / module to output environment variables from a serverless project",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
