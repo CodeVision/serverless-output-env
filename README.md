@@ -16,7 +16,7 @@ Unfortunately above mentioned plugin does not offer a solution (anymore) to refe
 
 In order to make this possible (again), this plugin allows you to define environment variables under the `custom.output-env` configuration option in the `serverless` configuration file. Similar to the [Serverless Export Env](https://github.com/arabold/serverless-export-env) plugin a command can then be used to export both the 'regular' environment variables (defined for individual functions and at the `provider` level) as well as these custom 'local' environment variables.
 
-Thanks go out to @arabold for the [Serverless Export Env](https://github.com/arabold/serverless-export-env) plugin on which this plugin is largely based.
+Thanks go out to [@arabold](https://github.com/arabold) for the [Serverless Export Env](https://github.com/arabold/serverless-export-env) plugin on which this plugin is largely based.
 
 ## Usage
 
