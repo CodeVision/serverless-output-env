@@ -21,8 +21,7 @@ export default class OutputEnvPlugin {
       [`${PLUGIN_NAME}:output`]: () => this.outputVariables()
     }
 
-    this.commands = {
-      [PLUGIN_NAME]: {
+    const commandOptions = {
         usage: 'Get the environment and custom variables defined in the serverless.yml',
         lifecycleEvents: ['output'],
         options: {
@@ -39,7 +38,11 @@ export default class OutputEnvPlugin {
             default: false
           }
         }
-      }
+      };
+
+    this.commands = {
+      [capitalize(PLUGIN_NAME)]: commandOptions,
+      [PLUGIN_NAME]: commandOptions
     }
   }
 
@@ -48,7 +51,7 @@ export default class OutputEnvPlugin {
   }
 
   async collectVariables() {
-    const customs = this.serverless.service.custom?.[PLUGIN_NAME];
+    const customs = this.serverless.service.custom?.[capitalize(PLUGIN_NAME)];
 
     let customStageVars = {};
     if (customs) {
@@ -94,6 +97,12 @@ export default class OutputEnvPlugin {
       await writeOutputFile(this.preparedOutput, this.options.outputFile);
     }
   }
+}
+
+const capitalize = name => {
+  return name.split(/[-_]+/)
+    .map((value, index) => index !== 0 ? `${value[0].toUpperCase()}${value.slice(1)}` : value )
+    .join('');
 }
 
 const writeOutputFile = async (output, file) => {

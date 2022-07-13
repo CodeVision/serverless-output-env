@@ -73,7 +73,7 @@ For example:
 
 ```yaml
 custom:
-  "output-env":
+  outputEnv:
     localVariables:
       dev:
         MY_VAR: value
