@@ -5,7 +5,7 @@ import { writeFile } from 'fs/promises';
 const PLUGIN_NAME = 'output-env';
 const PRODUCTION_STAGE_NAME = 'prod';
 
-export default class GetEnvPlugin {
+export default class OutputEnvPlugin {
   constructor(serverless, options, { log }) {
     this.serverless = serverless;
     this.options = options;
