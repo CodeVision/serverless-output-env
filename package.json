@@ -4,15 +4,12 @@
   "description": "Serverless plugin / module to output environment variables from a serverless project",
   "main": "src/index.js",
   "type": "module",
-  "scripts": {
-    "test": "jest"
-  },
   "keywords": [
     "serverless",
     "env"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "CodeVision <codevision@gmail.com>",
+  "license": "MIT",
   "devDependencies": {
     "@types/serverless": "^3.12.7"
   },
