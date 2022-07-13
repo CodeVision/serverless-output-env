@@ -2,6 +2,9 @@ import Resolver from './lib/resolver.js';
 
 import { writeFile } from 'fs/promises';
 
+const PLUGIN_NAME = 'output-env';
+const PRODUCTION_STAGE_NAME = 'prod';
+
 export default class GetEnvPlugin {
   constructor(serverless, options, { log }) {
     this.serverless = serverless;
@@ -10,16 +13,16 @@ export default class GetEnvPlugin {
 
     this.hooks = {
       intialize: () => this.init(),
-      'before:output-env:output': async () => {
+      [`before:${PLUGIN_NAME}:output`]: async () => {
         await this.collectVariables();
         await this.resolveVariables();
         await this.prepareOutput();
       },
-      'output-env:output': () => this.outputVariables()
+      [`${PLUGIN_NAME}:output`]: () => this.outputVariables()
     }
 
     this.commands = {
-      'output-env': {
+      [PLUGIN_NAME]: {
         usage: 'Get the environment and custom variables defined in the serverless.yml',
         lifecycleEvents: ['output'],
         options: {
@@ -45,7 +48,7 @@ export default class GetEnvPlugin {
   }
 
   async collectVariables() {
-    const customs = this.serverless.service.custom?.['output-env'];
+    const customs = this.serverless.service.custom?.[PLUGIN_NAME];
 
     let customStageVars = {};
     if (customs) {
@@ -54,7 +57,7 @@ export default class GetEnvPlugin {
       const defaults = customs.variables?.default;
       const stageVars = customs.variables?.[stage];
 
-      if (stage === 'prod' && !customs.useDefaultForProduction) {
+      if (stage === PRODUCTION_STAGE_NAME && !customs.useDefaultForProduction) {
         customStageVars = { ...stageVars };
       } else {
         customStageVars = { ...defaults, ...stageVars };
