@@ -54,8 +54,8 @@ export default class GetEnvPlugin {
     if (customs) {
       const stage = this.serverless.service.provider.stage;
 
-      const defaults = customs.variables?.default;
-      const stageVars = customs.variables?.[stage];
+      const defaults = customs.localVariables?.default;
+      const stageVars = customs.localVariables?.[stage];
 
       if (stage === PRODUCTION_STAGE_NAME && !customs.useDefaultForProduction) {
         customStageVars = { ...stageVars };
