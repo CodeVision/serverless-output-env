@@ -91,7 +91,7 @@ export default class OutputEnvPlugin {
 
   async outputVariables() {
     if (this.options.print) {
-      this.log.info(this.preparedOutput);
+      this.log.notice(this.preparedOutput);
     } else {
       await writeOutputFile(this.preparedOutput, this.options.outputFile);
     }
