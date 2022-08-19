@@ -55,7 +55,7 @@ export default class OutputEnvPlugin {
 
     let customStageVars = {};
     if (customs) {
-      const stage = this.serverless.service.provider.stage;
+      const stage = this.options.stage || this.serverless.service.provider.stage;
 
       const defaults = customs.localVariables?.default;
       const stageVars = customs.localVariables?.[stage];
