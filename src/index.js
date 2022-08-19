@@ -35,7 +35,6 @@ export default class OutputEnvPlugin {
             usage: 'Print the variables to the command line instead of writing to a file',
             shortcut: 'p',
             type: 'boolean',
-            default: false
           }
         }
       };
