@@ -75,7 +75,7 @@ export default class OutputEnvPlugin {
       functionEnvVars = { ...functionEnvVars, ...func.environment };
     };
 
-    this.environmentVariables = { raw: { ...customStageVars, ...globalEnvVars, ...functionEnvVars }};
+    this.environmentVariables = { raw: { ...globalEnvVars, ...functionEnvVars, ...customStageVars }};
   }
 
   async resolveVariables() {
